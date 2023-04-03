@@ -1,0 +1,93 @@
+body{
+    background-image: url("img/bg.jpg");
+    background-size: cover;
+    background-blend-mode: lighten;
+    background-attachment: fixed;
+}
+
+footer{
+    background-color: black;
+    bottom: 0;
+    color:white;
+    text-align: center;
+    margin-left: 6%;
+    margin-right: 6%;
+    position: sticky;
+}
+
+.container-main{
+    border-radius: 5px 5px 0px 0px;
+    opacity: 90%;
+    margin-top: 1%;
+    margin-left: 6%;
+    margin-right: 6%;
+    background-color: white;
+    height: auto;
+    overflow: hidden;
+}
+
+.header-menu{
+    list-style-type: none;
+    opacity: 95%;
+    background-color: rgb(16, 144, 224);
+    top: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+.header-menu-item{
+    float: left;
+    border: 1px white solid;
+}
+
+li a{
+    padding: 10px;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: white;
+}
+
+li a:hover{
+    background-color: rgb(4, 134, 220);
+}
+
+.container-hotvideos{
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    background-color: white;
+    overflow: hidden;
+}
+
+.container-hotvideos a{
+    text-decoration: none;
+    color: black;
+}
+
+.container-hotvideos a .hotvideos{
+    background: white;
+    padding: 0 0 0 0;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.message-warn{
+    background-color: red;
+    text-align: center;
+    padding: 10px 10px 10px 10px;
+    overflow: hidden;
+    border-left: 20px solid rgb(161, 54, 54);
+}
+
+.container-userinfo{
+    margin: 0 auto;
+    background-color: gray;
+    display: grid;
+    grid-template-columns: auto auto;
+}
+
+.container-basicinfo{
+    text-align: center;
+    grid-column: 1 / span 2;
+    grid-row: 1;
+}

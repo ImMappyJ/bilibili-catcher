@@ -1,0 +1,36 @@
+form{
+    align-self: center;
+    font-size:30px;
+    color: blue;
+    text-align: center;
+}
+
+@keyframes up{
+    from {padding: 200 0;}
+    to {padding: 10 0;}
+}
+
+@keyframes down{
+    from {padding: 10 0;}
+    to {padding: 200 0;}
+}
+
+@-o-keyframes up{
+    from {padding: 200 0;}
+    to {padding: 10 0;}
+}
+
+@-o-keyframes down{
+    from {padding: 10 0;}
+    to {padding: 200 0;}
+}
+
+@-webkit-keyframes up{
+    from {padding: 200 0;}
+    to {padding: 10 0;}
+}
+
+@-webkit-keyframes down{
+    from {padding: 10 0;}
+    to {padding: 200 0;}
+}
