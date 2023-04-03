@@ -9,7 +9,8 @@ if(isset($_GET["uid"])){
     if(strcmp($uid,'')){
         printSearchBoxWithUID($uid);
         echo '<script>searchboxUp();</script>';
-        printUserInfo($uid);
+        $printer = new UserInfoPrint();
+        $printer->printInfo($uid);
     }else{
         printSearchBox();
         echo '<script>searchboxDown();</script>';

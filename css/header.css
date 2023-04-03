@@ -84,10 +84,16 @@ li a:hover{
     background-color: gray;
     display: grid;
     grid-template-columns: auto auto;
+    
 }
 
-.container-basicinfo{
+.container-userinfo-basic{
     text-align: center;
     grid-column: 1 / span 2;
     grid-row: 1;
+}
+
+.container-userinfo-item{
+    text-align: center;
+    border: 3px solid #253434;
 }

@@ -9,6 +9,10 @@ class GetInfoParents{
     }
 }
 
+abstract class Printer{
+    abstract function printInfo($mid);
+}
+
 class RegionInfo extends GetInfoParents{
 
     public function __construct()
@@ -229,40 +233,63 @@ function printRegionInfo(){
 }
 
 /*
+    个人信息
+*/
+class UserInfoPrint extends Printer{
+/*
     打印个人信息
 */
-function printUserInfo($uid){
-    $uinfo = new UserInfo($uid);
-    $json = $uinfo->getinfo();
-    if($json["code"] != 0){
-        echo '
-        <div class="message-warn">
-            <h1>Code:'.$json["code"].'</h1>
-            <h1>'.$json["message"].'</h1>
-        </div>
-        ';
-    }else{
-        echo '
-        <div class="container-userinfo">
-            <div class="container-basicinfo">
-                <h1>基本信息</h1>
-                <img style="border-radius: 100px;" height="200" width="200" src="'.$json["data"]["face"].'" referrerPolicy="no-referrer">
-                <br/>
-                <h2 style="display:inline;">'.$json["data"]["name"].'</h2>
-                <svg style="display:inline;" width="25" height="15" viewBox="0 0 1901 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" width="200" height="200" class="icon">'.getLevelModelData($json["data"]["level"]).'</path></svg>
-                <img style="display:inline;" width="18" height="18" src="'.getSexIconData($json["data"]["sex"]).'">';
+    function printInfo($uid){
+        {
+            $uinfo = new UserInfo($uid);
+            $json = $uinfo->getinfo();
+            if($json["code"] != 0){
+                echo '
+                <div class="message-warn">
+                    <h1>Code:'.$json["code"].'</h1>
+                    <h1>'.$json["message"].'</h1>
+                </div>
+                ';
+            }else{
+                $data = $json["data"];
+                echo '
+                <div class="container-userinfo">
+                    <div class="container-userinfo-basic">
+                        <h1>基本信息</h1>
+                        <img style="border-radius: 100px;" height="200" width="200" src="'.$data["face"].'" referrerPolicy="no-referrer">
+                        <br/>';
         
-        if($json["data"]["fans_medal"]["show"] && $json["data"]["fans_medal"]["wear"]){
-            $medal = $json["data"]["fans_medal"]["medal"];
-            printFansMedal($medal["medal_color_start"],$medal["medal_color_end"],$medal["medal_color_border"],$medal["medal_name"],$medal["level"]);
-        }
+                if(!empty($data["school"]["name"])){
+                    echo '<h2 style="display:inline; background-color: #6c6c67; border: 2px solid #484845; color: #121211;">'.$data["school"]["name"].'</h2>';
+                }
+                echo '
+                        <h2 style="display:inline;">'.$data["name"].'</h2>
+                        <svg style="display:inline;" width="25" height="15" viewBox="0 0 1901 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" width="200" height="200" class="icon">'.$this->getLevelModelData($data["level"]).'</path></svg>
+                        <img style="display:inline;" width="18" height="18" src="'.$this->getSexIconData($data["sex"]).'">';
+                
+                if($data["fans_medal"]["show"] && $data["fans_medal"]["wear"]){
+                    $medal = $data["fans_medal"]["medal"];
+                    $this->printFansMedal($medal["medal_color_start"],$medal["medal_color_end"],$medal["medal_color_border"],$medal["medal_name"],$medal["level"]);
+                }
+        
+                $this->printVIPIcon($data["vip"]["label"]);
+                $this->printOfficialRank($data["official"]);
+                echo '
+                        <h5>'.$data["sign"].'</h5>
+                    </div>
+                    <div class="container-userinfo-item">
+                        <h1>动态云图</h1> 
+                    </div>
+                    <div class="container-userinfo-item">
+                        <h1>投稿云图</h1> 
+                    </div>
+                </div>
+                ';
+        } // 基础信息
 
-        echo '
-                <h5>'.$json["data"]["sign"].'</h5>
-            </div>
-           <h></h> 
-        </div>
-        ';
+        {
+            echo '';
+        }
     }
 }
 
@@ -332,5 +359,40 @@ function printFansMedal($start,$end,$border,$name,$level){
     </div>
     <div class="medal-level" style="border-color: #'.$hex_border.'; color: #'.$hex_start.';border-left: .5px solid #f25d8e;border-bottom-left-radius: 0;border-top-left-radius: 0;border-bottom-right-radius: 1px;border-top-right-radius: 1px;width: 18px;background: #fff;"><div class="tiny" style="transform: scale(.5);width: 200%;height: 200%;font-weight: 400;transform-origin: left 30%;font-size: 20px;">'.$level.'</div></div></div><!----></div>
     ';
+}
+
+/*
+    打印会员勋章
+*/
+function printVIPIcon($label){
+    echo '<br />';
+    echo '<img style="display:inline; transform: scale(0.5,0.5); vertical-align: middle;" referrerPolicy="no-referrer" src="'.$label["img_label_uri_hans_static"].'" title="'.$label["text"].'">';
+}
+
+/*
+    打印认证徽章
+*/
+function printOfficialRank($official){
+    $type = $official["type"];
+    $svg = '';
+    switch($type){
+        case -1:
+            return;
+        case 0:
+            $svg = 'https://s1.hdslb.com/bfs/seed/jinkela/short/user-avatar/personal.svg';
+            break;
+        case 1:
+            $svg = 'https://s1.hdslb.com/bfs/seed/jinkela/short/user-avatar/business.svg';
+            break;
+    }
+    $title = $official["title"];
+    $desc = $official["desc"];
+    echo '
+    <div class="official-box" style="display: inline;">
+        <object style="transform: scale(0.4); vertical-align: middle;" data="'.$svg.'" type="image/svg+xml"></object>
+        <h3 style="vertical-align: middle;display: inline;">'.$desc.$title.'</h3>
+    </div>
+    ';
+}
 }
 ?>
