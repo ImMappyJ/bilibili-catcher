@@ -1,10 +1,14 @@
 body{
-    background-color: whitesmoke;
+    background-image: url("img/bg.jpg");
+    background-size: cover;
+    background-blend-mode: lighten;
+    background-attachment: fixed;
 }
 
 #container-main{
     box-shadow: 4px 4px 4px black;
-    background-color: gray;
+    background-color: #5aa584;
+    opacity: 90%;
     margin: 10% 20% 0 20%;
     padding: 100px;
     padding-bottom: 30px;

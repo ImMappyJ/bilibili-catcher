@@ -1,9 +1,14 @@
 <?php
-    $email = $_POST["email"];
-    $pwd = md5($_POST["pwd"]);
-
-    if($email == '' || $pwd == ''){
-        die("NO EMAIL AND PWD");
+    if(isset($_COOKIE["email"])){
+        $email = $_COOKIE["email"];
+        $pwd = $_COOKIE["pwd"];
+    }else{
+        if(!isset($_POST["email"]) || !isset($_POST["pwd"])){
+            echo '<script>open("login.php");</script>';
+        }else{
+            $email = $_POST["email"];
+            $pwd = md5($_POST["pwd"]);
+        }
     }
 
     require_once(dirname(__DIR__)."\api\db.php");
@@ -28,11 +33,31 @@
         }else{
             if($row['email'] == $email && $row['pwd'] == $pwd){
                 echo '<script>alert("登录成功！");</script>';
+                $expire = time()+60*60*24*30;
+                setcookie("email",$email,$expire); //cookie 30天过期
+                setcookie("pwd",$pwd,$expire); // cookie 30天过期
+                printMainPage();
             }else{
-                echo '<script>alert("密码错误！");</script>';
+                echo '<script>alert("密码错误！"); open("login.php");</script>';
             }
         }
     }else{
         echo '<script>alert("数据库错误！");</script>';
+    }
+
+
+    function printMainPage(){
+        echo '
+        <head>
+            <title>管理中心</title>
+            <meta charset="utf-8" />
+            <link rel="stylesheet" type="text/css" href="css/admin.css">
+        </head>
+        <body>
+            <div id="container-main">
+                <h1>管理中心</h1>
+            </div>
+        </body>
+        ';
     }
 ?>

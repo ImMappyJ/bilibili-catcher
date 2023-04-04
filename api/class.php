@@ -431,7 +431,7 @@ function printUploadedVideosCloudWords($uid){
     $uvtd = new UserVideoTagData($uid);
     $json = $uvtd->getinfo();
     if($json["code"] != 200){
-        echo '<div id="video-cloudpic"><h1>该用户未上传视频</h1></div>';
+        echo '<div id="video-cloudpic" style="width: 500px; height: 500px; margin: 0 auto; vertical-align:center"><h1>该用户未上传视频</h1></div>';
         return ;
     }
     echo '
@@ -496,7 +496,7 @@ function printUploadedVideosCloudWords($uid){
     打印动态云图
 */
 function printDynamicsCloudWords($uid){
-    echo '<div id="dynamics-cloudpic" style="width: 500px; height: 500px; margin: 0 auto;"><h2>Coming Soon...</h2></div>';
+    echo '<div id="dynamics-cloudpic" style="width: 500px; height: 500px; margin: 0 auto; vertical-align:center;"><h2>Coming Soon...</h2></div>';
 }
 }
 ?>

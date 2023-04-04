@@ -8,15 +8,15 @@
         <div id="container-main">
             <h1>登录</h1>
             <form action="admin.php" method="POST" style="vertical-align:middle;">
-                <label for="email" style="margin: 0 30 0 auto;">Email:</label>
+                <label for="email" style="margin: 0 auto;">邮箱:</label>
                 <input type="email" id="email" name="email" required>
                 <br />
-                <label for="pwd" style="margin: 0 auto;">Password:</label>
+                <label for="pwd" style="margin: 0 auto;">密码:</label>
                 <input type="password" id="pwd" name="pwd" required>
                 <br />
                 <br />
                 <br />
-                <input type="submit" value="登录" style="bottom: 0px; font-size: larger;">
+                <input type="submit" value="登录" style="bottom: 0px; font-size: larger;border-radius: 3px;">
             </form>
         </div>
     </body>
