@@ -81,7 +81,7 @@ li a:hover{
 
 .container-userinfo{
     margin: 0 auto;
-    background-color: gray;
+    background-color: white;
     display: grid;
     grid-template-columns: auto auto;
     
@@ -90,10 +90,13 @@ li a:hover{
 .container-userinfo-basic{
     text-align: center;
     grid-column: 1 / span 2;
+    background-color: gray;
     grid-row: 1;
 }
 
 .container-userinfo-item{
     text-align: center;
-    border: 3px solid #253434;
+    border: 3px solid gray;
+    width: auto;
+    padding: auto auto auto auto;
 }

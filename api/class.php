@@ -1,4 +1,6 @@
 <?php
+define("_WEB_URL","localhost"); //个人域名
+
 class GetInfoParents{
     protected $url;
 
@@ -34,6 +36,27 @@ class UserInfo extends GetInfoParents{
     public function __construct($uid)
     {
         $this->url = "https://api.bilibili.com/x/space/wbi/acc/info?mid=".$uid."&platform=web";
+    }
+}
+
+class UserVideosList extends GetInfoParents{
+    public function __construct($uid)
+    {
+        $this->url = "https://api.bilibili.com/x/space/wbi/arc/search?mid=".$uid."&pn=1&ps=20&order=pubdate&index=1&platform=web";
+    }
+}
+
+class UserVideoTag extends GetInfoParents{
+    public function __construct($mid)
+    {
+        $this->url = "https://api.bilibili.com/x/web-interface/view/detail/tag?bvid=".$mid;
+    }
+}
+
+class UserVideoTagData extends GetInfoParents{
+    public function __construct($uid)
+    {
+        $this->url = "http://"._WEB_URL."/api/uservideosdata.php?uid=".$uid;
     }
 }
 
@@ -94,7 +117,7 @@ function printOnlineHotVideo(){
     foreach($list as $single_video){
         echo 
         '
-        <a href="'.$single_video["short_link"].'">
+        <a target="_blank" href="'.$single_video["short_link"].'">
         <div class="hotvideos">
         <img style="margin:0 auto;" title="'.$single_video["desc"].'" src="'.$single_video["pic"].'" referrerPolicy="no-referrer" width="286.5" height="179">
         <h6 style="height:48px;overflow:hidden;">'.$single_video["title"].'</h6>
@@ -278,10 +301,16 @@ class UserInfoPrint extends Printer{
                         <h5>'.$data["sign"].'</h5>
                     </div>
                     <div class="container-userinfo-item">
-                        <h1>动态云图</h1> 
+                        <h1>最近动态云图(20条)</h1> 
+                        ';
+                $this->printDynamicsCloudWords($uid);
+                echo '
                     </div>
                     <div class="container-userinfo-item">
-                        <h1>投稿云图</h1> 
+                        <h1>最近投稿云图(20条)</h1> 
+                        ';
+                $this->printUploadedVideosCloudWords($uid);
+                echo '
                     </div>
                 </div>
                 ';
@@ -393,6 +422,81 @@ function printOfficialRank($official){
         <h3 style="vertical-align: middle;display: inline;">'.$desc.$title.'</h3>
     </div>
     ';
+}
+
+/*
+    打印投稿云图
+*/
+function printUploadedVideosCloudWords($uid){
+    $uvtd = new UserVideoTagData($uid);
+    $json = $uvtd->getinfo();
+    if($json["code"] != 200){
+        echo '<div id="video-cloudpic"><h1>该用户未上传视频</h1></div>';
+        return ;
+    }
+    echo '
+    <div id="video-cloudpic" style="width: 500px; height: 500px; margin: 0 auto;"></div>
+    <script>
+            var chart = echarts.init(document.getElementById("video-cloudpic"));
+
+            var option = {
+                tooltip: {},
+                series: [ {
+                    type: "wordCloud",
+                    gridSize: 2,
+                    sizeRange: [12, 50],
+                    rotationRange: [-90, 90],
+                    shape: "square",
+                    drawOutOfBound: false,
+                    width: 500,
+                    height: 500,
+                    shrinkToFit: true,
+                    textStyle: {
+                        color: function () {
+                            return "rgb(" + [
+                                Math.round(Math.random() * 160),
+                                Math.round(Math.random() * 160),
+                                Math.round(Math.random() * 160)
+                            ].join(",") + ")";
+                        }
+                    },
+                    emphasis: {
+                        focus: "self",
+                        
+                        textStyle: {
+                            shadowBlur: 10,
+                            shadowColor: "#333"
+                        }
+                    },
+                    data: [';
+    foreach($json["data"]["fluency"] as $id => $info_arr){
+        echo '
+                    {
+                        name: "'.$info_arr["name"].'",
+                        value: '.$info_arr["value"].'
+                    },
+                    ';
+    }
+    echo '          {
+                        name: "",
+                        value: 0
+                    }
+                    ]
+                } ]
+            };
+
+            chart.setOption(option);
+
+            window.onresize = chart.resize;
+        </script>
+    ';
+}
+
+/*
+    打印动态云图
+*/
+function printDynamicsCloudWords($uid){
+    echo '<div id="dynamics-cloudpic" style="width: 500px; height: 500px; margin: 0 auto;"><h2>Coming Soon...</h2></div>';
 }
 }
 ?>

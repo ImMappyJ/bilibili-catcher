@@ -1,0 +1,13 @@
+body{
+    background-color: whitesmoke;
+}
+
+#container-main{
+    box-shadow: 4px 4px 4px black;
+    background-color: gray;
+    margin: 10% 20% 0 20%;
+    padding: 100px;
+    padding-bottom: 30px;
+    text-align: center;
+    border-radius: 5px;
+}
