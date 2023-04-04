@@ -9,10 +9,10 @@
             <h1>登录</h1>
             <form action="admin.php" method="POST" style="vertical-align:middle;">
                 <label for="email" style="margin: 0 30 0 auto;">Email:</label>
-                <input type="email" id="email" required>
+                <input type="email" id="email" name="email" required>
                 <br />
                 <label for="pwd" style="margin: 0 auto;">Password:</label>
-                <input type="password" id="pwd" required>
+                <input type="password" id="pwd" name="pwd" required>
                 <br />
                 <br />
                 <br />
@@ -21,7 +21,3 @@
         </div>
     </body>
 </html>
-
-<?php
-
-?>
