@@ -14,7 +14,7 @@ if(isset($_GET["uid"])){
     }else{
         $tags_arr = gettagsfluence($bvid_arr);
         $array = ["code"=>_CODE_SAFE,"data"=>["vlists"=>$bvid_arr,"fluency"=>$tags_arr]];
-        echo json_encode($array);
+        echo json_encode($array,JSON_UNESCAPED_UNICODE);
     }
 }else{
     $array = ["code"=>_PARAM_MISS,"data"=>null];

@@ -60,6 +60,27 @@ class UserVideoTagData extends GetInfoParents{
     }
 }
 
+class UserDynamics extends GetInfoParents{
+    public function __construct($uid)
+    {
+        $this->url = "https://api.bilibili.com/x/polymer/web-dynamic/v1/feed/space?host_mid=".$uid;
+    }
+}
+
+class UserDynamicsKey extends GetInfoParents{
+    public function __construct()
+    {
+        $this->url = "http://"._WEB_URL."/api/userdynamicskey.php";
+    }
+}
+
+class UserDynamicsData extends GetInfoParents{
+    public function __construct($uid)
+    {
+        $this->url = "http://"._WEB_URL."/api/userdynamicsdata.php?uid=".$uid;
+    }
+}
+
 class Util{
 
     public static function geturl($url){
@@ -301,7 +322,7 @@ class UserInfoPrint extends Printer{
                         <h5>'.$data["sign"].'</h5>
                     </div>
                     <div class="container-userinfo-item">
-                        <h1>最近动态云图(20条)</h1> 
+                        <h1>动态画像(仅供参考)</h1> 
                         ';
                 $this->printDynamicsCloudWords($uid);
                 echo '
@@ -437,9 +458,9 @@ function printUploadedVideosCloudWords($uid){
     echo '
     <div id="video-cloudpic" style="width: 500px; height: 500px; margin: 0 auto;"></div>
     <script>
-            var chart = echarts.init(document.getElementById("video-cloudpic"));
+            var vchart = echarts.init(document.getElementById("video-cloudpic"));
 
-            var option = {
+            var voption = {
                 tooltip: {},
                 series: [ {
                     type: "wordCloud",
@@ -485,18 +506,82 @@ function printUploadedVideosCloudWords($uid){
                 } ]
             };
 
-            chart.setOption(option);
+            vchart.setOption(voption);
 
-            window.onresize = chart.resize;
+            window.onresize = vchart.resize;
         </script>
     ';
 }
 
 /*
-    打印动态云图
+    打印成分云图
 */
 function printDynamicsCloudWords($uid){
-    echo '<div id="dynamics-cloudpic" style="width: 500px; height: 500px; margin: 0 auto; vertical-align:center;"><h2>Coming Soon...</h2></div>';
+    $uvtd = new UserDynamicsData($uid);
+    $json = $uvtd->getinfo();
+    if($json["code"] != 200){
+        echo '<div id="dynamics-cloudpic" style="width: 500px; height: 500px; margin: 0 auto; vertical-align:center"><h1>该用户没有动态</h1></div>';
+        return ;
+    }
+    echo '
+    <div id="dynamics-cloudpic" style="width: 500px; height: 500px; margin: 0 auto;"></div>
+    <script>
+            var dchart = echarts.init(document.getElementById("dynamics-cloudpic"));
+
+            var doption = {
+                tooltip: {
+                    formatter:function (params) {
+                        return "你知道我是什么成分吧";
+                    }
+                },
+                series: [ {
+                    type: "wordCloud",
+                    gridSize: 2,
+                    sizeRange: [50, 50],
+                    shape: "square",
+                    drawOutOfBound: false,
+                    width: 500,
+                    height: 500,
+                    shrinkToFit: true,
+                    textStyle: {
+                        color: function () {
+                            return "rgb(" + [
+                                Math.round(Math.random() * 160),
+                                Math.round(Math.random() * 160),
+                                Math.round(Math.random() * 160)
+                            ].join(",") + ")";
+                        }
+                    },
+                    emphasis: {
+                        focus: "self",
+                        
+                        textStyle: {
+                            shadowBlur: 10,
+                            shadowColor: "#333"
+                        }
+                    },
+                    data: [';
+    foreach($json["data"] as $ele){
+    echo '
+                    {
+                        name: "'.$ele["nick"].'",
+                        value: 1
+                    },
+                    ';
+    }
+    echo '          {
+                        name: "",
+                        value: 0
+                    }
+                    ]
+                } ]
+            };
+
+            dchart.setOption(doption);
+
+            window.onresize = dchart.resize;
+        </script>
+    ';
 }
 }
 ?>

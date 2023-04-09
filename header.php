@@ -14,7 +14,7 @@
             <li class="header-menu-item"><a href="index.php">主站概览</a></li>
             <li class="header-menu-item"><a href="user.php">用户查询</a></li>
             <li class="header-menu-item"><a href="#index">视频查询</a></li>
-            <li class="header-menu-item" style="float:right"><a href="admin/admin.php" target="_blank">管理中心</a></li>
+            <li class="header-menu-item" style="float:right"><a href="" target="_blank">Github</a></li>
         </ul>
     </body>
 </html>
