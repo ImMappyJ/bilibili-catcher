@@ -369,8 +369,8 @@ class VideoInfoPrint extends Printer{
             </div>
             <div class="container-temp" style="display:none;">';
             for($i = 0;$i < sizeof($page);$i++){
-                echo "<h id=\"{$i}-cid\">".$page[$i]["cid"]."</option>";
-                echo "<h id=\"{$i}-bvid\">".$data["bvid"]."</option>";
+                echo "<h id=\"{$i}-cid\">".$page[$i]["cid"]."</h>";
+                echo "<h id=\"{$i}-bvid\">".$data["bvid"]."</h>";
             }
             echo '
             </div>';
@@ -382,7 +382,7 @@ class VideoInfoPrint extends Printer{
                     var index = select.selectedIndex;
                     var bvid = document.getElementById(index + "-bvid").innerHTML;
                     var cid = document.getElementById(index + "-cid").innerHTML;
-                    window.open("/api/download.php?bvid="+bvid+"&cid="+cid,"_blank");
+                    open("/api/download.php?bvid="+bvid+"&cid="+cid,"_blank");
                 });
             </script>
             ';
