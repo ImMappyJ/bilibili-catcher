@@ -84,7 +84,6 @@ li a:hover{
     background-color: white;
     display: grid;
     grid-template-columns: auto auto;
-    
 }
 
 .container-userinfo-basic{
@@ -99,4 +98,16 @@ li a:hover{
     border: 3px solid gray;
     width: auto;
     padding: auto auto auto auto;
+}
+
+.container-videoinfo-basic{
+    margin: 0 auto;
+    background-color: white;
+    text-align: center;
+}
+
+.container-videoinfo-download{
+    margin: 0 auto;
+    background-color: gray;
+    text-align: center;
 }
