@@ -1,5 +1,5 @@
 <?php
-define("_WEB_URL","https://b.funworld.cc"); //个人域名
+define("_WEB_URL","localhost"); //个人域名
 
 class GetInfoParents{
     protected $url;
