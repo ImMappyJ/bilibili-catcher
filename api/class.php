@@ -377,6 +377,7 @@ class VideoInfoPrint extends Printer{
                     <option value="32">480p</option>
                 </select>
                 <button id="download" style="font-size: 20px;">下载</button>
+                <label id="progress"></label>
             </div>
             <div class="container-temp" style="display:none;">';
             for($i = 0;$i < sizeof($page);$i++){
@@ -406,10 +407,11 @@ class VideoInfoPrint extends Printer{
                     xhr.responseType = "blob";
 
                     // 获取下载进度
+                    var progress = document.getElementById("progress");
                     xhr.onprogress = function(e) {
                         if (e.lengthComputable) {
                           var percentComplete = (e.loaded / e.total) * 100;
-                          console.log(percentComplete + "% downloaded");
+                          progress.innerHTML = percentComplete + "% downloaded";
                         }
                     };
 
@@ -432,7 +434,7 @@ class VideoInfoPrint extends Printer{
                         document.body.removeChild(link);
                       }
                     };
-                  
+                    
                     // 发送请求
                     xhr.send();
                 });
