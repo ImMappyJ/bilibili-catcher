@@ -408,6 +408,7 @@ class VideoInfoPrint extends Printer{
 
                     // 获取下载进度
                     var progress = document.getElementById("progress");
+                    progress.innerHTML = "正在获取资源...";
                     xhr.onprogress = function(e) {
                         if (e.lengthComputable) {
                           var percentComplete = (e.loaded / e.total) * 100;
