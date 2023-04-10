@@ -46,10 +46,10 @@ function gettagsfluence($bvid_arr){
             $tags = $json["data"];
             foreach($tags as $tag){
                 $id = $tag["tag_id"];
-                if($tags_arr[$id] == null){
-                    $tags_arr[$id] = ["name"=>$tag["tag_name"],"value"=>1];
-                }else{
+                if(array_key_exists($id,$tags_arr)){
                     $tags_arr[$id]["value"]++;
+                }else{
+                    $tags_arr[$id] = ["name"=>$tag["tag_name"],"value"=>1];
                 }
             }
         }else{

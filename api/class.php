@@ -1,5 +1,5 @@
 <?php
-define("_WEB_URL","localhost"); //个人域名
+define("_WEB_URL","https://b.funworld.cc"); //个人域名
 
 class GetInfoParents{
     protected $url;
@@ -56,7 +56,7 @@ class UserVideoTag extends GetInfoParents{
 class UserVideoTagData extends GetInfoParents{
     public function __construct($uid)
     {
-        $this->url = "http://"._WEB_URL."/api/uservideosdata.php?uid=".$uid;
+        $this->url = _WEB_URL."/api/uservideosdata.php?uid=".$uid;
     }
 }
 
@@ -70,14 +70,14 @@ class UserDynamics extends GetInfoParents{
 class UserDynamicsKey extends GetInfoParents{
     public function __construct()
     {
-        $this->url = "http://"._WEB_URL."/api/userdynamicskey.php";
+        $this->url = _WEB_URL."/api/userdynamicskey.php";
     }
 }
 
 class UserDynamicsData extends GetInfoParents{
     public function __construct($uid)
     {
-        $this->url = "http://"._WEB_URL."/api/userdynamicsdata.php?uid=".$uid;
+        $this->url = _WEB_URL."/api/userdynamicsdata.php?uid=".$uid;
     }
 }
 
@@ -180,7 +180,7 @@ function printOnlineHotVideo(){
     foreach($list as $single_video){
         echo 
         '
-        <a target="_blank" href="'.$single_video["short_link"].'">
+        <a target="_blank" href="'.$single_video["short_link_v2"].'">
         <div class="hotvideos">
         <img style="margin:0 auto;" title="'.$single_video["desc"].'" src="'.$single_video["pic"].'" referrerPolicy="no-referrer" width="286.5" height="179">
         <h6 style="height:48px;overflow:hidden;">'.$single_video["title"].'</h6>
