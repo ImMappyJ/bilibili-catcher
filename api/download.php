@@ -1,13 +1,23 @@
 <?php
 require(__DIR__.'/class.php');
 
+//检测请求中referer 防止恶意攻击
+$referer = $_SERVER['HTTP_REFERER'];
+$referer_regex = '#' . _WEB_URL . '\/.+#i';
+if(!preg_match($referer_regex,$referer)){
+    echo 'Wrong Request!';
+    return;
+}
+
+//下载
 $bvid = $_GET["bvid"];
 $cid = $_GET["cid"];
+$qn = $_GET["qn"];
 
-$vus = new VideoStreamURL($bvid, $cid);
+$vus = new VideoStreamURL($bvid, $cid, $qn);
 $json = $vus->getinfo();
 $url = $json["data"]["durl"][0]["url"];
-$file_name = $bvid . '.mp4'; // 要保存的文件名
+$file_name = $bvid.'.mp4'; // 要保存的文件名
 
 // 初始化 CURL
 $ch = curl_init();
@@ -16,7 +26,8 @@ $ch = curl_init();
 $header = array(
     'Content-Type: application/octet-stream',
     'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.62',
-    'referer: https://www.bilibili.com'
+    'referer: https://www.bilibili.com',
+    'Cookie: '._BILI_COOKIE
 );
 curl_setopt($ch, CURLOPT_URL, $url);
 curl_setopt($ch, CURLOPT_HTTPHEADER, $header);

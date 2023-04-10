@@ -1,5 +1,6 @@
 <?php
-define("_WEB_URL","localhost"); //个人域名
+define("_WEB_URL","http://localhost"); //个人域名
+define("_BILI_COOKIE",""); //bilibili 用户cookie (用于下载视频)
 
 class GetInfoParents{
     protected $url;
@@ -89,9 +90,9 @@ class VideoInfo extends GetInfoParents{
 }
 
 class VideoStreamURL extends GetInfoParents{
-    public function __construct($bvid,$cid)
+    public function __construct($bvid,$cid,$qn)
     {
-        $this->url = "https://api.bilibili.com/x/player/playurl?bvid=".$bvid."&cid=".$cid."&qn=64";
+        $this->url = "https://api.bilibili.com/x/player/playurl?fnval=1&bvid=".$bvid."&cid=".$cid."&qn=".$qn;
     }
 }
 
@@ -99,7 +100,11 @@ class Util{
 
     public static function geturl($url){
         $handle = curl_init($url);
-        $header = array('Content-type: application/json;charset=UTF-8','user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.62');
+        $header = array(
+        'Content-type: application/json;charset=UTF-8',
+        'user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36 Edg/111.0.1661.62',
+        'Cookie: '._BILI_COOKIE
+        );
         curl_setopt($handle,CURLOPT_SSL_VERIFYHOST,False);
         curl_setopt($handle,CURLOPT_SSL_VERIFYPEER,False);
         curl_setopt($handle,CURLOPT_RETURNTRANSFER,True);
@@ -365,6 +370,12 @@ class VideoInfoPrint extends Printer{
             }
             echo '
                 </select>
+                <select id="quality" name="quality" style="font-size: 20px;">
+                    <option value="80">1080p</option>
+                    <option value="74">720p 60fps</option>
+                    <option value="64">720p</option>
+                    <option value="32">480p</option>
+                </select>
                 <button id="download" style="font-size: 20px;">下载</button>
             </div>
             <div class="container-temp" style="display:none;">';
@@ -379,10 +390,51 @@ class VideoInfoPrint extends Printer{
                 var download_btn = document.getElementById("download");
                 download_btn.addEventListener("click",function(){
                     var select = document.getElementById("videoSelect");
-                    var index = select.selectedIndex;
-                    var bvid = document.getElementById(index + "-bvid").innerHTML;
-                    var cid = document.getElementById(index + "-cid").innerHTML;
-                    open("/api/download.php?bvid="+bvid+"&cid="+cid,"_blank");
+                    var quality = document.getElementById("quality");
+                    var q_index = quality.selectedIndex;
+                    var qn = quality.options[q_index].value;
+                    var v_index = select.selectedIndex;
+                    var bvid = document.getElementById(v_index + "-bvid").innerHTML;
+                    var cid = document.getElementById(v_index + "-cid").innerHTML;
+                    alert("正在下载，请勿关闭窗口！");
+
+                    // 创建一个 XMLHttpRequest 对象
+                    var xhr = new XMLHttpRequest();
+                  
+                    // 设置该对象的属性，包括请求方法、文件 URL、响应类型
+                    xhr.open("GET", "api/download.php?bvid="+bvid+"&cid="+cid+"&qn="+qn, true);
+                    xhr.responseType = "blob";
+
+                    // 获取下载进度
+                    xhr.onprogress = function(e) {
+                        if (e.lengthComputable) {
+                          var percentComplete = (e.loaded / e.total) * 100;
+                          console.log(percentComplete + "% downloaded");
+                        }
+                    };
+
+                    // 注册回调函数，处理文件下载完成后的操作
+                    xhr.onload = function() {
+                      // 检查状态码，如果请求成功，则进行下载操作
+                      if (xhr.status === 200) {
+                        // 创建reader
+                        var blob = new Blob([this.response], {type: "video/mp4"});
+                        // 创建一个 <a> 元素
+                        var link = document.createElement("a");
+                  
+                        // 设置该元素的属性，包括文件名和 URL
+                        link.href = window.URL.createObjectURL(blob);
+                        link.download = bvid+".mp4";
+                  
+                        // 将该元素添加到页面中并模拟点击
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                      }
+                    };
+                  
+                    // 发送请求
+                    xhr.send();
                 });
             </script>
             ';
